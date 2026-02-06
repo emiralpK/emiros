@@ -43,16 +43,24 @@ download:
 configure: download
 	@echo "Configuring Buildroot with EmiROS defconfig..."
 	@cp $(CONFIG_FILE) $(BUILDROOT_DIR)/configs/
-	@make -C $(BUILDROOT_DIR) O=$(PWD)/$(OUTPUT_DIR) emiros_rpi5_defconfig
+	@make -C $(BUILDROOT_DIR) O=$(CURDIR)/$(OUTPUT_DIR) emiros_rpi5_defconfig
 
 build:
 	@echo "Building EmiROS..."
-	@./scripts/build.sh
+	@if [ ! -d $(OUTPUT_DIR) ]; then \
+		echo "Error: Build not configured. Run 'make configure' first."; \
+		exit 1; \
+	fi
+	@echo "Starting build process..."
+	@echo "This may take a while (30 minutes to 2 hours depending on your system)..."
+	@make -C $(BUILDROOT_DIR) O=$(CURDIR)/$(OUTPUT_DIR) all
+	@echo ""
+	@echo "Build completed successfully!"
 
 clean:
 	@echo "Cleaning build artifacts..."
 	@if [ -d $(OUTPUT_DIR) ]; then \
-		make -C $(BUILDROOT_DIR) O=$(PWD)/$(OUTPUT_DIR) clean; \
+		make -C $(BUILDROOT_DIR) O=$(CURDIR)/$(OUTPUT_DIR) clean; \
 	fi
 
 distclean:

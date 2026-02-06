@@ -26,27 +26,19 @@ if [ ! -d "$OUTPUT_DIR" ]; then
     exit 1
 fi
 
-# Copy rootfs overlay
-echo "Preparing rootfs overlay..."
-if [ -d "rootfs_overlay" ]; then
-    cp -r rootfs_overlay/* "$OUTPUT_DIR/target/" 2>/dev/null || true
-fi
-
-# Copy boot files
-echo "Preparing boot configuration..."
-if [ -d "boot" ]; then
-    mkdir -p "$OUTPUT_DIR/images/boot"
-    cp boot/* "$OUTPUT_DIR/images/boot/" 2>/dev/null || true
-fi
-
 # Start build
 echo ""
 echo "Starting build process..."
 echo "This may take a while (30 minutes to 2 hours depending on your system)..."
 echo ""
 
-# Build with Buildroot
-make -C "$BUILDROOT_DIR" O="$PWD/$OUTPUT_DIR" all
+# Get absolute path for OUTPUT_DIR
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+PROJECT_DIR="$(dirname "$SCRIPT_DIR")"
+OUTPUT_ABS="$PROJECT_DIR/$OUTPUT_DIR"
+
+# Build with Buildroot using absolute path
+make -C "$BUILDROOT_DIR" O="$OUTPUT_ABS" all
 
 echo ""
 echo "================================"
