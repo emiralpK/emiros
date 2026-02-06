@@ -1,0 +1,35 @@
+#!/bin/sh
+# S10network - Configure network interfaces
+
+case "$1" in
+    start)
+        echo "Starting network..."
+        
+        # Bring up loopback
+        /sbin/ifconfig lo 127.0.0.1 up
+        
+        # Start DHCP client on eth0
+        if [ -x /sbin/dhcpcd ]; then
+            /sbin/dhcpcd eth0
+        elif [ -x /sbin/udhcpc ]; then
+            /sbin/udhcpc -i eth0 -b
+        fi
+        
+        echo "Network started"
+        ;;
+    stop)
+        echo "Stopping network..."
+        killall dhcpcd 2>/dev/null || true
+        killall udhcpc 2>/dev/null || true
+        /sbin/ifconfig eth0 down
+        ;;
+    restart|reload)
+        "$0" stop
+        "$0" start
+        ;;
+    *)
+        echo "Usage: $0 {start|stop|restart}"
+        exit 1
+esac
+
+exit 0

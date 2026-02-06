@@ -1,0 +1,30 @@
+#!/bin/sh
+# S01sysctl - Configure kernel parameters
+
+case "$1" in
+    start)
+        echo "Configuring kernel parameters..."
+        
+        # Mount configfs if available
+        [ -d /sys/kernel/config ] && mount -t configfs none /sys/kernel/config
+        
+        # Set hostname
+        [ -f /etc/hostname ] && hostname -F /etc/hostname
+        
+        # Load sysctl settings if available
+        [ -f /etc/sysctl.conf ] && sysctl -p /etc/sysctl.conf
+        
+        echo "Kernel parameters configured"
+        ;;
+    stop)
+        ;;
+    restart|reload)
+        "$0" stop
+        "$0" start
+        ;;
+    *)
+        echo "Usage: $0 {start|stop|restart}"
+        exit 1
+esac
+
+exit 0

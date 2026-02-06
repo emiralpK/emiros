@@ -1,0 +1,15 @@
+# /etc/profile - EmiROS system-wide shell profile
+
+export PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+export PS1='\u@\h:\w\$ '
+export EDITOR=vi
+
+# Display welcome message
+if [ -f /etc/motd ]; then
+    cat /etc/motd
+fi
+
+# Source user profile
+if [ -f "$HOME/.profile" ]; then
+    . "$HOME/.profile"
+fi

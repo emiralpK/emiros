@@ -1,0 +1,37 @@
+#!/bin/sh
+# S20dbus - D-Bus message bus daemon (required for XFCE)
+
+DBUS_DAEMON=/usr/bin/dbus-daemon
+DBUS_PIDFILE=/var/run/dbus.pid
+
+case "$1" in
+    start)
+        echo "Starting D-Bus daemon..."
+        
+        # Create D-Bus directories
+        mkdir -p /var/run/dbus
+        mkdir -p /var/lock
+        
+        # Start D-Bus
+        if [ -x "$DBUS_DAEMON" ]; then
+            $DBUS_DAEMON --system --fork --nopidfile
+            echo "D-Bus started"
+        else
+            echo "D-Bus daemon not found"
+        fi
+        ;;
+    stop)
+        echo "Stopping D-Bus daemon..."
+        killall dbus-daemon 2>/dev/null || true
+        ;;
+    restart|reload)
+        "$0" stop
+        sleep 1
+        "$0" start
+        ;;
+    *)
+        echo "Usage: $0 {start|stop|restart}"
+        exit 1
+esac
+
+exit 0

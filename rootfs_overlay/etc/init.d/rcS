@@ -1,0 +1,26 @@
+#!/bin/sh
+# /etc/init.d/rcS - Run all S* scripts
+
+# Source functions library if available
+[ -f /etc/init.d/functions ] && . /etc/init.d/functions
+
+# Run all startup scripts
+for i in /etc/init.d/S??* ; do
+    # Ignore dangling symlinks (if any).
+    [ ! -f "$i" ] && continue
+
+    case "$i" in
+        *.sh)
+            # Source shell script for speed.
+            (
+                trap - INT QUIT TSTP
+                set start
+                . $i
+            )
+            ;;
+        *)
+            # No sh extension, so fork subprocess.
+            $i start
+            ;;
+    esac
+done
