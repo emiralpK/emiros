@@ -1,0 +1,12 @@
+# Build directories
+buildroot-*/
+output/
+
+# Temporary files
+*.tmp
+*.bak
+*~
+
+# OS files
+.DS_Store
+Thumbs.db
