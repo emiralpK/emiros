@@ -1,0 +1,23 @@
+#!/bin/sh
+# S40xfce - Start XFCE desktop environment
+
+case "$1" in
+    start)
+        echo "XFCE will be started by user session..."
+        # XFCE is started via .xinitrc when startx is called
+        ;;
+    stop)
+        echo "Stopping XFCE..."
+        killall xfce4-session 2>/dev/null || true
+        ;;
+    restart|reload)
+        "$0" stop
+        sleep 1
+        "$0" start
+        ;;
+    *)
+        echo "Usage: $0 {start|stop|restart}"
+        exit 1
+esac
+
+exit 0

@@ -1,0 +1,35 @@
+# Raspberry Pi 5 Boot Configuration - EmiROS
+
+# GPU Memory
+gpu_mem=256
+
+# Display settings
+hdmi_force_hotplug=1
+hdmi_drive=2
+disable_overscan=1
+
+# Video mode
+hdmi_group=1
+hdmi_mode=16
+
+# Audio
+dtparam=audio=on
+
+# Enable UART
+enable_uart=1
+
+# ARM frequency (optional overclock)
+# arm_freq=2400
+
+# Over voltage (if overclocking)
+# over_voltage=6
+
+# Boot delay
+boot_delay=1
+
+# Disable rainbow splash
+disable_splash=1
+
+# Device tree
+dtoverlay=vc4-kms-v3d
+max_framebuffers=2

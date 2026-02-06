@@ -1,0 +1,26 @@
+#!/bin/sh
+# S30xorg - Start X11 server
+
+XORG=/usr/bin/X
+XORG_LOG=/var/log/Xorg.0.log
+
+case "$1" in
+    start)
+        echo "X11 will be started by user session..."
+        # X11 is started via .bash_profile auto-login
+        ;;
+    stop)
+        echo "Stopping X11..."
+        killall X Xorg 2>/dev/null || true
+        ;;
+    restart|reload)
+        "$0" stop
+        sleep 1
+        "$0" start
+        ;;
+    *)
+        echo "Usage: $0 {start|stop|restart}"
+        exit 1
+esac
+
+exit 0
